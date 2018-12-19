@@ -297,11 +297,12 @@
 
     <ImageButton
         android:id="@+id/scanQR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_qrcode"
-        android:theme="@style/Button.Login"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:adjustViewBounds="true"
         android:background="@color/transparent"
-        android:contentDescription="@string/scanQR_description" />
+        android:contentDescription="@string/scanQR_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_qrcode_scan" />
 
 </RelativeLayout>
