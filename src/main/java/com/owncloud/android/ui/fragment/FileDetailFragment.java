@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.owncloud.android.MainApp;
@@ -509,6 +510,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             }
             fileSize.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
             fileModifiedTimestamp.setText(DisplayUtils.getRelativeTimestamp(getContext(), file.getModificationTimestamp()));
+
+            fileModifiedTimestamp.setLongClickable(true);
+            fileModifiedTimestamp.setOnLongClickListener(v -> {
+                Toast.makeText(getContext(), DisplayUtils.unixTimeToHumanReadable(file.getModificationTimestamp()),
+                               Toast.LENGTH_SHORT).show();
+                return true;
+            });
+
             setFilePreview(file);
             setFavoriteIconStatus(file.isFavorite());
 
