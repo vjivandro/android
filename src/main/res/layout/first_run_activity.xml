@@ -85,6 +85,7 @@
                 android:maxWidth="500dp"
                 android:minWidth="300dp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:text="@string/signup_with_provider"/>
         </LinearLayout>
 
@@ -96,6 +97,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:onClick="onHostYourOwnServerClick"
+            android:visibility="gone"
             android:text="@string/host_your_own_server"/>
     </LinearLayout>
 

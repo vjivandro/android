@@ -179,7 +179,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_USERNAME = "USERNAME";
     private static final String KEY_PASSWORD = "PASSWORD";
     private static final String KEY_ASYNC_TASK_IN_PROGRESS = "AUTH_IN_PROGRESS";
-    private static final String WEB_LOGIN = "/index.php/login/flow";
+    private static final String WEB_LOGIN = "";
     public static final String PROTOCOL_SUFFIX = "://";
     public static final String LOGIN_URL_DATA_KEY_VALUE_SEPARATOR = ":";
     public static final String HTTPS_PROTOCOL = "https://";
@@ -283,6 +283,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         mIsFirstAuthAttempt = true;
 
+        System.out.println("test");
         /// init activity state
         mAccountMgr = AccountManager.get(this);
         mNewCapturedUriFromOAuth2Redirection = null;
@@ -291,6 +292,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAction = getIntent().getByteExtra(EXTRA_ACTION, ACTION_CREATE);
         mAccount = getIntent().getExtras().getParcelable(EXTRA_ACCOUNT);
         if (savedInstanceState == null) {
+            System.out.println("test-1");
             initAuthTokenType();
         } else {
             mAuthTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE);
@@ -301,22 +303,25 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String webloginUrl = null;
         boolean showLegacyLogin;
         if (getIntent().getBooleanExtra(EXTRA_USE_PROVIDER_AS_WEBLOGIN, false)) {
-            webViewLoginMethod = true;
+            System.out.println("test-2");
+            webViewLoginMethod = false;
             webloginUrl = getString(R.string.provider_registration_server);
             showLegacyLogin = false;
         } else {
+            System.out.println("test-2a");
             webViewLoginMethod = !TextUtils.isEmpty(getResources().getString(R.string.webview_login_url));
-            showLegacyLogin = true;
+            showLegacyLogin = false;
         }
 
         if (webViewLoginMethod) {
+            System.out.println("test-2b");
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
         /// load user interface
         if (!webViewLoginMethod) {
             setContentView(R.layout.account_setup);
-
+            System.out.println("test-3");
             /// initialize general UI elements
             initOverallUi();
 
@@ -342,6 +347,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             initAuthorizationPreFragment(savedInstanceState);
 
         } else {
+            System.out.println("test-4");
             setContentView(R.layout.account_setup_webview);
             mLoginWebView = findViewById(R.id.login_webview);
             initWebViewLogin(webloginUrl, showLegacyLogin, false);
@@ -372,74 +378,100 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebViewLogin(String baseURL, boolean showLegacyLogin, boolean useGenericUserAgent) {
+//        mLoginWebView.setVisibility(View.GONE);
+//
+//        final ProgressBar progressBar = findViewById(R.id.login_webview_progress_bar);
+//
+//        mLoginWebView.getSettings().setAllowFileAccess(false);
+//        mLoginWebView.getSettings().setJavaScriptEnabled(true);
+//        mLoginWebView.getSettings().setDomStorageEnabled(true);
+//
+//        if (useGenericUserAgent) {
+//            mLoginWebView.getSettings().setUserAgentString(MainApp.getNextcloudUserAgent());
+//        } else {
+//            mLoginWebView.getSettings().setUserAgentString(getWebLoginUserAgent());
+//        }
+//        mLoginWebView.getSettings().setSaveFormData(false);
+//        mLoginWebView.getSettings().setSavePassword(false);
+//
+//        Map<String, String> headers = new HashMap<>();
+//        headers.put(RemoteOperation.OCS_API_HEADER, RemoteOperation.OCS_API_HEADER_VALUE);
+//
+//        String url;
+//        if (baseURL != null && !baseURL.isEmpty()) {
+//            url = baseURL;
+//        } else {
+//            url = getResources().getString(R.string.webview_login_url);
+//        }
+//
+//        mLoginWebView.loadUrl(url, headers);
+//
+//        setClient(progressBar);
+
+        forceOldLoginMethod = true;
+
         mLoginWebView.setVisibility(View.GONE);
+        webViewLoginMethod = false;
 
-        final ProgressBar progressBar = findViewById(R.id.login_webview_progress_bar);
+        setContentView(R.layout.account_setup);
 
-        mLoginWebView.getSettings().setAllowFileAccess(false);
-        mLoginWebView.getSettings().setJavaScriptEnabled(true);
-        mLoginWebView.getSettings().setDomStorageEnabled(true);
+        // initialize general UI elements
+        initOverallUi();
 
-        if (useGenericUserAgent) {
-            mLoginWebView.getSettings().setUserAgentString(MainApp.getNextcloudUserAgent());
-        } else {
-            mLoginWebView.getSettings().setUserAgentString(getWebLoginUserAgent());
-        }
-        mLoginWebView.getSettings().setSaveFormData(false);
-        mLoginWebView.getSettings().setSavePassword(false);
+        mPasswordInputLayout.setVisibility(View.VISIBLE);
+        mUsernameInputLayout.setVisibility(View.VISIBLE);
+        mUsernameInput.requestFocus();
+        mOAuth2Check.setVisibility(View.INVISIBLE);
+        mAuthStatusView.setVisibility(View.INVISIBLE);
+        mServerStatusView.setVisibility(View.INVISIBLE);
+        mTestServerButton.setVisibility(View.INVISIBLE);
+        forceOldLoginMethod = true;
+        mOkButton.setVisibility(View.VISIBLE);
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put(RemoteOperation.OCS_API_HEADER, RemoteOperation.OCS_API_HEADER_VALUE);
+        initServerPreFragment(null);
 
-        String url;
-        if (baseURL != null && !baseURL.isEmpty()) {
-            url = baseURL;
-        } else {
-            url = getResources().getString(R.string.webview_login_url);
-        }
+        mHostUrlInput.setText(baseURL);
 
-        mLoginWebView.loadUrl(url, headers);
-
-        setClient(progressBar);
+        checkOcServer();
 
         // show snackbar after 60s to switch back to old login method
-        if (showLegacyLogin) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    DisplayUtils.createSnackbar(mLoginWebView, R.string.fallback_weblogin_text, Snackbar.LENGTH_INDEFINITE)
-                            .setActionTextColor(getResources().getColor(R.color.primary_dark))
-                            .setAction(R.string.fallback_weblogin_back, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    mLoginWebView.setVisibility(View.INVISIBLE);
-                                    webViewLoginMethod = false;
-
-                                    setContentView(R.layout.account_setup);
-
-                                    // initialize general UI elements
-                                    initOverallUi();
-
-                                    mPasswordInputLayout.setVisibility(View.VISIBLE);
-                                    mUsernameInputLayout.setVisibility(View.VISIBLE);
-                                    mUsernameInput.requestFocus();
-                                    mOAuth2Check.setVisibility(View.INVISIBLE);
-                                    mAuthStatusView.setVisibility(View.INVISIBLE);
-                                    mServerStatusView.setVisibility(View.INVISIBLE);
-                                    mTestServerButton.setVisibility(View.INVISIBLE);
-                                    forceOldLoginMethod = true;
-                                    mOkButton.setVisibility(View.VISIBLE);
-
-                                    initServerPreFragment(null);
-
-                                    mHostUrlInput.setText(baseURL);
-
-                                    checkOcServer();
-                                }
-                            }).show();
-                }
-            }, 60 * 1000);
-        }
+//        if (showLegacyLogin) {
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    DisplayUtils.createSnackbar(mLoginWebView, R.string.fallback_weblogin_text, Snackbar.LENGTH_INDEFINITE)
+//                            .setActionTextColor(getResources().getColor(R.color.primary_dark))
+//                            .setAction(R.string.fallback_weblogin_back, new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    mLoginWebView.setVisibility(View.INVISIBLE);
+//                                    webViewLoginMethod = false;
+//
+//                                    setContentView(R.layout.account_setup);
+//
+//                                    // initialize general UI elements
+//                                    initOverallUi();
+//
+//                                    mPasswordInputLayout.setVisibility(View.VISIBLE);
+//                                    mUsernameInputLayout.setVisibility(View.VISIBLE);
+//                                    mUsernameInput.requestFocus();
+//                                    mOAuth2Check.setVisibility(View.INVISIBLE);
+//                                    mAuthStatusView.setVisibility(View.INVISIBLE);
+//                                    mServerStatusView.setVisibility(View.INVISIBLE);
+//                                    mTestServerButton.setVisibility(View.INVISIBLE);
+//                                    forceOldLoginMethod = true;
+//                                    mOkButton.setVisibility(View.VISIBLE);
+//
+//                                    initServerPreFragment(null);
+//
+//                                    mHostUrlInput.setText(baseURL);
+//
+//                                    checkOcServer();
+//                                }
+//                            }).show();
+//                }
+//            }, 60 * 1000);
+//        }
     }
 
     @Override
@@ -475,7 +507,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 super.onPageFinished(view, url);
 
                 progressBar.setVisibility(View.GONE);
-                mLoginWebView.setVisibility(View.VISIBLE);
+//                mLoginWebView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -622,6 +654,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAuthStatusView = findViewById(R.id.auth_status_text);
         mOAuth2Check = findViewById(R.id.oauth_onOff_check);
         mServerStatusView = findViewById(R.id.server_status_text);
+        mServerStatusView.setVisibility(View.GONE);
         mTestServerButton = findViewById(R.id.testServerButton);
 
         mOkButton = findViewById(R.id.buttonOK);
@@ -629,7 +662,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         setupInstructionMessage();
 
-        mTestServerButton.setVisibility(mAction == ACTION_CREATE ? View.VISIBLE : View.GONE);
+        mTestServerButton.setVisibility(mAction == ACTION_CREATE ? View.VISIBLE : View.VISIBLE);
     }
 
 
@@ -672,7 +705,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * @param savedInstanceState Saved activity state, as in {{@link #onCreate(Bundle)}
      */
     private void initServerPreFragment(Bundle savedInstanceState) {
-
+        System.out.println("Test-5");
         /// step 1 - load and process relevant inputs (resources, intent, savedInstanceState)
         boolean isUrlInputAllowed = getResources().getBoolean(R.bool.show_server_url_input);
         if (savedInstanceState == null) {
@@ -853,8 +886,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mOAuth2Check.setVisibility(View.GONE);
             mOAuthAuthEndpointText.setVisibility(View.GONE);
             mOAuthTokenEndpointText.setVisibility(View.GONE);
-            mUsernameInput.setVisibility(View.GONE);
-            mPasswordInput.setVisibility(View.GONE);
+            mUsernameInput.setVisibility(View.VISIBLE);
+            mPasswordInput.setVisibility(View.VISIBLE);
 
         } else {
             if (mAction == ACTION_CREATE &&
@@ -868,8 +901,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 // OAuth 2 authorization
                 mOAuthAuthEndpointText.setVisibility(View.VISIBLE);
                 mOAuthTokenEndpointText.setVisibility(View.VISIBLE);
-                mUsernameInput.setVisibility(View.GONE);
-                mPasswordInput.setVisibility(View.GONE);
+                mUsernameInput.setVisibility(View.VISIBLE);
+                mPasswordInput.setVisibility(View.VISIBLE);
 
             } else {
                 // basic HTTP authorization
@@ -1449,7 +1482,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         // update server status, but don't show it yet
         if (!webViewLoginMethod) {
-            updateServerStatusIconAndText(result);
+            //updateServerStatusIconAndText(result);
         }
 
         if (result.isSuccess()) {
@@ -1679,7 +1712,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private void updateServerStatusIconNoRegularAuth() {
         mServerStatusIcon = R.drawable.ic_alert;
-        mServerStatusText = getResources().getString(R.string.auth_can_not_auth_against_server);
+        //mServerStatusText = getResources().getString(R.string.auth_can_not_auth_against_server);
     }
 
     /**
@@ -1784,7 +1817,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerInfo = new GetServerInfoOperation.ServerInfo();
 
             // update status icon and text
-            updateServerStatusIconAndText(result);
+            //updateServerStatusIconAndText(result);
             showServerStatus();
             mAuthStatusIcon = 0;
             mAuthStatusText = EMPTY_STRING;

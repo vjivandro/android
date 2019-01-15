@@ -74,34 +74,35 @@
             android:contentDescription="@string/auth_expired_basic_auth_toast"/>
 
             <FrameLayout
-	        android:id="@+id/hostUrlFrame"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/zero">
+                android:id="@+id/hostUrlFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/zero">
 
                 <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_hostUrl"
-                android:theme="@style/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.owncloud.android.ui.components.CustomEditText
-                    android:id="@+id/hostUrlInput"
+                    android:id="@+id/input_layout_hostUrl"
+                    android:theme="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:contentDescription="@string/auth_host_address"
-                    android:drawablePadding="@dimen/alternate_half_padding"
-                    android:inputType="textUri"
-                    android:paddingRight="@dimen/alternate_padding_right"
-                    android:paddingEnd="@dimen/alternate_padding_right"
-                    android:paddingStart="@dimen/zero"
-                    android:paddingLeft="@dimen/zero"
-                    android:textColor="@color/login_text_color"
-                    android:textColorHint="@color/login_text_color">
+                    android:visibility="gone">
 
-                    <requestFocus/>
-                </com.owncloud.android.ui.components.CustomEditText>
+                    <com.owncloud.android.ui.components.CustomEditText
+                        android:id="@+id/hostUrlInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:contentDescription="@string/auth_host_address"
+                        android:drawablePadding="@dimen/alternate_half_padding"
+                        android:inputType="textUri"
+                        android:paddingRight="@dimen/alternate_padding_right"
+                        android:paddingEnd="@dimen/alternate_padding_right"
+                        android:paddingStart="@dimen/zero"
+                        android:paddingLeft="@dimen/zero"
+                        android:textColor="@color/login_text_color"
+                        android:textColorHint="@color/login_text_color">
+
+                        <requestFocus/>
+                    </com.owncloud.android.ui.components.CustomEditText>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,6 +146,7 @@
             android:drawableLeft="@android:drawable/stat_notify_sync"
             android:drawableStart="@android:drawable/stat_notify_sync"
             android:drawablePadding="@dimen/alternate_half_padding"
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:textColor="@color/login_text_color"
             android:text="@string/auth_testing_connection"
@@ -212,7 +214,7 @@
             android:theme="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <EditText
                 android:id="@+id/account_username"
@@ -232,7 +234,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/EditText"
-            android:visibility="gone"
+            android:visibility="visible"
             app:passwordToggleDrawable="@drawable/password_visibility_selector"
             app:passwordToggleTint="@color/login_text_hint_color">
 
@@ -263,17 +265,17 @@
             android:contentDescription="@string/auth_unauthorized"/>
 
             <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonOK"
-            android:theme="@style/Button.Login"
-            style="@style/Button.Login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:padding="@dimen/standard_padding"
-            android:enabled="false"
-            android:text="@string/setup_btn_connect"
-            android:contentDescription="@string/setup_btn_connect"
-            android:visibility="gone"/>
+                android:id="@+id/buttonOK"
+                style="@style/Button.Login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/setup_btn_connect"
+                android:enabled="true"
+                android:padding="@dimen/standard_padding"
+                android:text="@string/setup_btn_connect"
+                android:theme="@style/Button.Login"
+                android:visibility="visible" />
         </LinearLayout>
 
     </LinearLayout>

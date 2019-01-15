@@ -72,19 +72,21 @@ public class FirstRunActivity extends BaseActivity implements ViewPager.OnPageCh
         loginButton.setTextColor(Color.BLACK);
 
         loginButton.setOnClickListener(v -> {
-            if (getIntent().getBooleanExtra(EXTRA_ALLOW_CLOSE, false)) {
-                Intent authenticatorActivityIntent = new Intent(this, AuthenticatorActivity.class);
-                authenticatorActivityIntent.putExtra(AuthenticatorActivity.EXTRA_USE_PROVIDER_AS_WEBLOGIN, false);
-                startActivityForResult(authenticatorActivityIntent, FIRST_RUN_RESULT_CODE);
-            } else {
-                finish();
-            }
+//            if (getIntent().getBooleanExtra(EXTRA_ALLOW_CLOSE, false)) {
+//                Intent authenticatorActivityIntent = new Intent(this, AuthenticatorActivity.class);
+//                authenticatorActivityIntent.putExtra(AuthenticatorActivity.EXTRA_USE_PROVIDER_AS_WEBLOGIN, false);
+//                startActivityForResult(authenticatorActivityIntent, FIRST_RUN_RESULT_CODE);
+//            } else {
+//                finish();
+//            }
+            System.out.println("Login");
+            startActivity(new Intent(FirstRunActivity.this, AuthenticatorActivity.class));
         });
 
         Button providerButton = findViewById(R.id.signup);
         providerButton.setBackgroundColor(getResources().getColor(R.color.primary_dark));
         providerButton.setTextColor(getResources().getColor(R.color.login_text_color));
-        providerButton.setVisibility(isProviderOrOwnInstallationVisible ? View.VISIBLE : View.GONE);
+        providerButton.setVisibility(isProviderOrOwnInstallationVisible ? View.GONE : View.GONE);
         providerButton.setOnClickListener(v -> {
             Intent authenticatorActivityIntent = new Intent(this, AuthenticatorActivity.class);
             authenticatorActivityIntent.putExtra(AuthenticatorActivity.EXTRA_USE_PROVIDER_AS_WEBLOGIN, true);
@@ -99,7 +101,7 @@ public class FirstRunActivity extends BaseActivity implements ViewPager.OnPageCh
 
         TextView hostOwnServerTextView = findViewById(R.id.host_own_server);
         hostOwnServerTextView.setTextColor(getResources().getColor(R.color.login_text_color));
-        hostOwnServerTextView.setVisibility(isProviderOrOwnInstallationVisible ? View.VISIBLE : View.GONE);
+        hostOwnServerTextView.setVisibility(isProviderOrOwnInstallationVisible ? View.GONE : View.GONE);
 
         progressIndicator = findViewById(R.id.progressIndicator);
         ViewPager viewPager = findViewById(R.id.contentPanel);
