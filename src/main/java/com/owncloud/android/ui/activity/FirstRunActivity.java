@@ -68,7 +68,6 @@ public class FirstRunActivity extends BaseActivity implements ViewPager.OnPageCh
         setSlideshowSize(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 
         Button loginButton = findViewById(R.id.login);
-        loginButton.setBackgroundColor(Color.WHITE);
         loginButton.setTextColor(Color.BLACK);
 
         loginButton.setOnClickListener(v -> {
@@ -126,12 +125,12 @@ public class FirstRunActivity extends BaseActivity implements ViewPager.OnPageCh
 
     private void setSlideshowSize(boolean isLandscape) {
         boolean isProviderOrOwnInstallationVisible = getResources().getBoolean(R.bool.show_provider_or_own_installation);
-        LinearLayout buttonLayout = findViewById(R.id.buttonLayout);
+//        LinearLayout buttonLayout = findViewById(R.id.buttonLayout);
         LinearLayout.LayoutParams layoutParams;
 
-        buttonLayout.setOrientation(isLandscape ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
+//        buttonLayout.setOrientation(isLandscape ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
 
-        LinearLayout bottomLayout = findViewById(R.id.bottomLayout);
+//        LinearLayout bottomLayout = findViewById(R.id.bottomLayout);
         if (isProviderOrOwnInstallationVisible) {
             layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -140,7 +139,7 @@ public class FirstRunActivity extends BaseActivity implements ViewPager.OnPageCh
                     DisplayUtils.convertDpToPixel(isLandscape ? 100f : 150f, this));
         }
 
-        bottomLayout.setLayoutParams(layoutParams);
+//        bottomLayout.setLayoutParams(layoutParams);
     }
 
     @Override
@@ -243,8 +242,8 @@ public class FirstRunActivity extends BaseActivity implements ViewPager.OnPageCh
     public static FeatureItem[] getFirstRun() {
         return new FeatureItem[]{
                 new FeatureItem(R.drawable.logo, R.string.first_run_1_text, R.string.empty, true, false),
-                new FeatureItem(R.drawable.first_run_files, R.string.first_run_2_text, R.string.empty, true, false),
-                new FeatureItem(R.drawable.first_run_groupware, R.string.first_run_3_text, R.string.empty, true, false),
-                new FeatureItem(R.drawable.first_run_talk, R.string.first_run_4_text, R.string.empty, true, false)};
+                new FeatureItem(R.drawable.intro_dua, R.string.first_run_2_text, R.string.empty, true, false),
+                new FeatureItem(R.drawable.intro_tiga, R.string.first_run_3_text, R.string.empty, true, false),
+                new FeatureItem(R.drawable.intro_empat, R.string.first_run_4_text, R.string.empty, true, false)};
     }
 }

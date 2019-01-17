@@ -115,7 +115,6 @@
                 android:layout_marginEnd="@dimen/alternate_half_padding"
                 android:padding="@dimen/zero"
                 android:scaleType="fitCenter"
-                android:src="@drawable/arrow_right"
                 android:tint="@color/login_text_color"
                 android:background="@android:color/transparent"
                 android:onClick="onTestServerConnectionClick"
@@ -131,7 +130,6 @@
                 android:layout_marginEnd="@dimen/alternate_half_padding"
                 android:padding="@dimen/zero"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_refresh"
                 android:visibility="gone"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/auth_refresh_button"
@@ -143,15 +141,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/alternate_margin"
-            android:drawableLeft="@android:drawable/stat_notify_sync"
-            android:drawableStart="@android:drawable/stat_notify_sync"
             android:drawablePadding="@dimen/alternate_half_padding"
             android:visibility="gone"
             android:gravity="center_vertical"
             android:textColor="@color/login_text_color"
-            android:text="@string/auth_testing_connection"
-            android:minHeight="@dimen/display_text_min_height"
-            android:contentDescription="@string/auth_testing_connection"/>
+            android:minHeight="@dimen/display_text_min_height"/>
 
         <CheckBox
             android:id="@+id/oauth_onOff_check"
@@ -274,7 +268,7 @@
                 android:enabled="true"
                 android:padding="@dimen/standard_padding"
                 android:text="@string/setup_btn_connect"
-                android:theme="@style/Button.Login"
+                android:background="@drawable/rounded_button"
                 android:visibility="visible" />
         </LinearLayout>
 

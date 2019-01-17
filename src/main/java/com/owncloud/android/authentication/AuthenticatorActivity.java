@@ -1196,8 +1196,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             }
 
             if (mHostUrlInput != null) {
-                mServerStatusText = getResources().getString(R.string.auth_testing_connection);
-                mServerStatusIcon = R.drawable.progress_small;
+                //mServerStatusText = getResources().getString(R.string.auth_testing_connection);
+                //mServerStatusIcon = R.drawable.progress_small;
                 showServerStatus();
             }
 
@@ -1293,7 +1293,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 !mServerInfo.mVersion.isVersionValid() ||
                 mServerInfo.mBaseUrl == null ||
                 mServerInfo.mBaseUrl.length() == 0) {
-            mServerStatusIcon = R.drawable.ic_alert;
+            //mServerStatusIcon = R.drawable.ic_alert;
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
             showServerStatus();
             mOkButton.setEnabled(false);
@@ -1568,7 +1568,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * @param result Result of a remote operation performed in this activity
      */
     private void updateServerStatusIconAndText(RemoteOperationResult result) {
-        mServerStatusIcon = R.drawable.ic_alert;    // the most common case in the switch below
+        //mServerStatusIcon = R.drawable.ic_alert;    // the most common case in the switch below
 
         switch (result.getCode()) {
             case OK_SSL:
@@ -1666,7 +1666,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * @param result Result of a remote operation performed in this activity
      */
     private void updateAuthStatusIconAndText(RemoteOperationResult result) {
-        mAuthStatusIcon = R.drawable.ic_alert;    // the most common case in the switch below
+        //mAuthStatusIcon = R.drawable.ic_alert;    // the most common case in the switch below
 
         switch (result.getCode()) {
             case OK_SSL:
@@ -1706,12 +1706,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     private void updateStatusIconFailUserName(int failedStatusText) {
-        mAuthStatusIcon = R.drawable.ic_alert;
+        //mAuthStatusIcon = R.drawable.ic_alert;
         mAuthStatusText = getResources().getString(failedStatusText);
     }
 
     private void updateServerStatusIconNoRegularAuth() {
-        mServerStatusIcon = R.drawable.ic_alert;
+        //mServerStatusIcon = R.drawable.ic_alert;
         //mServerStatusText = getResources().getString(R.string.auth_can_not_auth_against_server);
     }
 

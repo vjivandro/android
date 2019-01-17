@@ -44,10 +44,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -85,6 +87,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -107,6 +110,7 @@ public class UserInfoActivity extends FileActivity {
     @BindView(R.id.user_icon) protected ImageView avatar;
     @BindView(R.id.userinfo_username) protected TextView userName;
     @BindView(R.id.userinfo_username_full) protected TextView fullName;
+    @BindView(R.id.delete_account) protected Button deleteAccont;
     @BindView(R.id.user_info_list) protected RecyclerView mUserInfoList;
     @BindView(R.id.empty_list_progress) protected ProgressBar multiListProgressBar;
 
@@ -118,6 +122,7 @@ public class UserInfoActivity extends FileActivity {
 
     private UserInfo userInfo;
     private Account account;
+    private View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,14 +161,13 @@ public class UserInfoActivity extends FileActivity {
         }
 
         setHeaderImage();
+
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.user_info_menu, menu);
-
-        return true;
+    @OnClick(R.id.delete_account)
+    void deleteAccont(View view) {
+        openAccountRemovalConfirmationDialog(account, getFragmentManager(), false);
     }
 
     @Override
@@ -172,9 +176,6 @@ public class UserInfoActivity extends FileActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-                break;
-            case R.id.delete_account:
-                openAccountRemovalConfirmationDialog(account, getFragmentManager(), false);
                 break;
             default:
                 retval = super.onOptionsItemSelected(item);

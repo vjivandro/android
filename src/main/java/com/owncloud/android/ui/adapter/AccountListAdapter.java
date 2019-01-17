@@ -122,10 +122,10 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> implements
         View actionView = inflater.inflate(R.layout.account_action, parent, false);
 
         TextView userName = actionView.findViewById(R.id.user_name);
-        userName.setText(R.string.prefs_add_account);
+//        userName.setText(R.string.prefs_add_account);
         userName.setTextColor(ThemeUtils.primaryColor(getContext(), true));
 
-        ((ImageView) actionView.findViewById(R.id.user_icon)).setImageResource(R.drawable.ic_account_plus);
+//        ((ImageView) actionView.findViewById(R.id.user_icon)).setImageResource(R.drawable.ic_account_plus);
 
         // bind action listener
         boolean isProviderOrOwnInstallationVisible = mContext.getResources()
